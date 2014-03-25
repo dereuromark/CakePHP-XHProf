@@ -25,6 +25,7 @@ before_script:
   - echo -ne "[xdebug]\nextension=xhprof.so\nxhprof.output_dir=/tmp" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - echo 'Configure::write("XHProf.library", dirname(APP) . "/vendors/xhprof/xhprof_lib");' >> app/Config/bootstrap.php
   - cp -R ../CakePHP-XHProf plugins/XHProf
+  - mkdir -p build/logs
   - echo "<phpunit>
       <filter>
         <whitelist processUncoveredFilesFromWhitelist=\"true\">
@@ -35,12 +36,17 @@ before_script:
         </whitelist>
       </filter>
       <logging>
-        <log type=\"coverage-text\" target=\"php://stdout\" showUncoveredFiles=\"false\" />
+        <log type=\"coverage-clover\" target=\"build/logs/clover.xml\" />
       </logging>
     </phpunit>" > phpunit.xml
+  - composer self-update
+  - composer update satooshi/php-coveralls --dev
 
 script:
   - ./lib/Cake/Console/cake test XHProf AllXHProf
+
+after_script:
+  - ./vendor/bin/coveralls
 
 notifications:
   email: false
