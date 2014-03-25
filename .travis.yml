@@ -39,9 +39,9 @@ before_script:
         <log type=\"coverage-clover\" target=\"build/logs/clover.xml\" />
       </logging>
     </phpunit>" > phpunit.xml
-  - echo "{\"require-dev\": {\"satooshi/php-coveralls\": \"dev-master\"}}" > composer.json
   - composer self-update
-  - composer install
+  - composer init --no-interaction
+  - composer require --dev satooshi/php-coveralls:dev-master
 
 script:
   - ./lib/Cake/Console/cake test XHProf AllXHProf
