@@ -1,6 +1,8 @@
 <?php
 
-App::uses('XHProf', 'XHProf.Lib');
+namespace XHProf\Test\Lib;
+
+use XHProf\Lib\XHProf;
 
 /**
  * XHProf Extended class to set the state of it

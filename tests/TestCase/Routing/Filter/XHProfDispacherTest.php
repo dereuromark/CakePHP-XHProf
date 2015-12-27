@@ -1,14 +1,17 @@
 <?php
 
-App::uses('XHProfDispatcher', 'XHProf.Routing/Filter');
-App::uses('CakeEvent', 'Event');
-App::uses('CakeResponse', 'Network');
+namespace XHProf\Test\Case\Routing\Filter;
+
+use Cake\TestSuite\TestCase;
+use XHProf\Routing\Filter\XHProfDispatcher;
+use Cake\Event\Event;
+use Cake\Network\Response;
 
 /**
  * XHProfDispatcher test case
  *
  */
-class XHProfDispatcherTest extends CakeTestCase {
+class XHProfDispatcherTest extends TestCase {
 
 /**
  * tearDown method
@@ -28,10 +31,10 @@ class XHProfDispatcherTest extends CakeTestCase {
  */
 	public function testReplaceRunId() {
 		$filter = new XHProfDispatcher();
-		$response = new CakeResponse();
+		$response = new Response();
 		$response->body('Run id: %XHProfRunId%.');
 
-		$event = new CakeEvent('DispatcherTest', $this, compact('response'));
+		$event = new Event('DispatcherTest', $this, compact('response'));
 		$filter->beforeDispatch($event);
 		$this->assertSame($response, $filter->afterDispatch($event));
 		$this->assertRegExp('/^Run id: [0-9a-f]{13}\.$/', $response->body());

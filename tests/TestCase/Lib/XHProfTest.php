@@ -1,12 +1,15 @@
 <?php
 
-App::uses('TestXHProf', 'XHProf.Test/Lib');
+namespace XHProf\Test\Case\Lib;
+
+use Cake\TestSuite\TestCase;
+use XHProf\Test\Lib\TestXHProf;
 
 /**
  * XHProf test case
  *
  */
-class XHProfTest extends CakeTestCase {
+class XHProfTest extends TestCase {
 
 /**
  * tearDown method

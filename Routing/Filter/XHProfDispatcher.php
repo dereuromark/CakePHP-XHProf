@@ -1,7 +1,10 @@
 <?php
 
-App::uses('DispatcherFilter', 'Routing');
-App::uses('XHProf', 'XHProf.Lib');
+namespace XHProf\Routing\Filter;
+
+use Cake\Core\Configure;
+use Cake\Routing\DispatcherFilter;
+use XHProf\Lib\XHProf;
 
 /**
  * XHProf Dispatcher Filter
@@ -12,10 +15,10 @@ class XHProfDispatcher extends DispatcherFilter {
 /**
  * Start the profiler
  *
- * @param CakeEvent $event
+ * @param Event $event
  * @return void
  */
-	public function beforeDispatch(CakeEvent $event) {
+	public function beforeDispatch(Event $event) {
 		XHProf::start();
 	}
 
@@ -24,7 +27,7 @@ class XHProfDispatcher extends DispatcherFilter {
  *
  * @return mixed Void or modified response if replaceRunId is defined
  */
-	public function afterDispatch(CakeEvent $event) {
+	public function afterDispatch(Event $event) {
 		$runId = XHProf::finish();
 		$replaceRunId = Configure::read('XHProf.replaceRunId');
 
