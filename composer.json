@@ -9,17 +9,15 @@
 		{
 			"name": "Renan Gonçalves",
 			"email": "renan.saddam@gmail.com"
+		},
+		{
+			"name": "Mark Scherer",
+			"email": "euromark@web.de"
 		}
 	],
 	"require": {
-		"php": ">=5.3",
-		"ext-xhprof": "*",
-		"composer/installers": "*"
-	},
-	"extra": {
-		"installer-name": "XHProf",
-		"branch-alias": {
-			"dev-master": "1.0.x-dev"
-		}
+		"php": ">=5.4",
+		"cakephp/cakephp": "~3.1",
+		"ext-xhprof": "*"
 	}
 }

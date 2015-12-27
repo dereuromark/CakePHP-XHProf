@@ -9,31 +9,12 @@ Plugin that quickly enables XHProf profiling for your CakePHP application.
 
 ## Requirements
 
-* PHP 5.3+
-* CakePHP 2.3+
+* PHP 5.4+
+* CakePHP 3
 * XHProf
 
 ## Installation
 First, make sure you enabled the xhprof extension and downloaded [phacility/xhprof](https://github.com/phacility/xhprof).
-
-### Manual
-
-1. Download http://github.com/renan/CakePHP-XHProf/zipball/master
-2. Unzip the downloaded file
-3. Move the contents to `Plugin/XHProf`
-
-### Git Submodule
-
-```bash
-git submodule add git://github.com/renan/CakePHP-XHProf.git Plugin/XHProf
-git submodule update --init
-```
-
-### Git Clone
-
-```bash
-git clone git://github.com/renan/CakePHP-XHProf.git Plugin/XHProf
-```
 
 ### Composer / Packagist
 
@@ -54,16 +35,16 @@ You might want to use "require-dev" if you only plan to use this for development
 
 The basic configuration consists of loading the plugin and pointing where the `xhprof_lib` directory is located on your system.
 
-On your `Config/bootstrap.php` file:
+In your `config/bootstrap.php` file:
 
 ```php
 // Load XHProf Plugin
-CakePlugin::load('XHProf');
+Plugin::load('XHProf');
 
 // XHProf Configuration
-Configure::write('XHProf', array(
+Configure::write('XHProf', [
 	'library' => '/usr/local/Cellar/php54-xhprof/270b75d/xhprof_lib',
-));
+]);
 ```
 
 Options:
@@ -77,32 +58,33 @@ Options:
 All options example:
 
 ```php
-Configure::write('XHProf', array(
+Configure::write('XHProf', [
 	'library' => '/usr/local/Cellar/php54-xhprof/270b75d/xhprof_lib',
 	'namespace' => 'myapp',
 	'flags' => XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY,
-	'ignored_functions' => array(
+	'ignored_functions' => [
 		'my_function',
 		'my_other_function',
-	),
+	],
 	'replaceRunId' => false,
-));
+]);
 ```
 
 ## Usage
 
 ### Dispatcher Filter
 
-Just include the `XHProfDispatcher` in your dispatcher filters list on `Config/bootstrap.php`:
+Just include the `XHProfDispatcher` in your dispatcher filters list in `config/bootstrap.php`:
 
 ```php
 Configure::write('Dispatcher.filters.xhprof', 'XHProf.XHProfDispatcher');
 ```
 
 By default it will try to replace `%XHProfRunId%` with the saved run id from the page's output.
-It allows you to include a link to the xhprof report on the page.
+It allows you to include a link to the XHProf report on the page.
 
-On your `View/Layouts/default.ctp`:
+#### Hardcoding in Template
+In your `src/Template/Layout/default.ctp`:
 
 ```php
 $url = sprintf(
@@ -116,7 +98,7 @@ echo $this->Html->link('XHProf Output', $url);
 #### DebugKit Panel
 If you are using [DebugKit](https://github.com/cakephp/debug_kit), you can use the provided panel here.
 
-Make sure you include html config of the URL endpoint of the xhprof_html folder:
+Make sure you include `html` config of the URL endpoint of the `xhprof_html` folder:
 ```php
 Configure::write('XHProf', array(
 	'library' => '/usr/local/Cellar/php54-xhprof/270b75d/xhprof_lib',
@@ -161,36 +143,7 @@ $runId = XHProf::finish();
 
 _Note_: There are two ways to stop the profiler as explained above. However only one can be used at each run.
 
-## Changelog
-
-### 1.0.0 (2014-09-30)
-
-- Added a DebugKit panel instead of messing with the layout file.
-  Thanks to @dereuromark for the patch.
-- Collecting code coverage metrics and reporting to coveralls
-
-### 0.1.0 (2012-11-03)
-
-Initial release
 
 ## License
 
-Copyright (c) 2014 Renan Gonçalves
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+MIT, please see [LICENSE](LICENSE).
