@@ -27,9 +27,9 @@ class XHProfTest extends TestCase {
 	 * @return void
 	 */
 	public function testStartStop() {
-		$XHProf = $this->getMockClass('TestXHProf', array(
+		$XHProf = $this->getMockClass('TestXHProf', [
 			'_initialize',
-		));
+		]);
 
 		//FIXME
 		return;
@@ -54,9 +54,9 @@ class XHProfTest extends TestCase {
 	 * @return void
 	 */
 	public function testStartFinish() {
-		$XHProf = $this->getMockClass('TestXHProf', array(
+		$XHProf = $this->getMockClass('TestXHProf', [
 			'_initialize',
-		));
+		]);
 
 		//FIXME
 		return;

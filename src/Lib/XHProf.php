@@ -22,16 +22,16 @@ class XHProf {
 	 *
 	 * @var array
 	 */
-	protected static $_baseConfig = array(
+	protected static $_baseConfig = [
 		'replaceRunId' => '%XHProfRunId%',
 		'namespace' => APP_DIR,
 		'library' => null,
 		'flags' => 0,
-		'ignored_functions' => array(
+		'ignored_functions' => [
 			'call_user_func',
 			'call_user_func_array',
-		),
-	);
+		],
+	];
 
 	/**
 	 * Whether profiling has started or not
@@ -51,7 +51,7 @@ class XHProf {
 	 * @param array $options List options passed to xhprof_enable, if none default configuration will be used
 	 * @return void
 	 */
-	public static function start(array $options = array()) {
+	public static function start(array $options = []) {
 		if (!self::$_initiated) {
 			self::_initialize();
 		}
@@ -60,9 +60,9 @@ class XHProf {
 		$options += (array)Configure::read('XHProf');
 
 		// Start profiling
-		xhprof_enable($options['flags'], array(
+		xhprof_enable($options['flags'], [
 			'ignored_functions' => $options['ignored_functions'],
-		));
+		]);
 
 		// Set as started
 		self::$_started = true;
@@ -123,10 +123,10 @@ class XHProf {
 		// Include libraries
 		if (!class_exists('XHProfRuns_Default')) {
 			$path = $options['library'] . DS . 'utils' . DS;
-			$files = array(
+			$files = [
 				$path . 'xhprof_lib.php',
 				$path . 'xhprof_runs.php',
-			);
+			];
 			foreach ($files as $file) {
 				if (!include $file) {
 					throw new \RuntimeException(sprintf(

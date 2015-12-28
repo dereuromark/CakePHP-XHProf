@@ -107,10 +107,10 @@ If you are using [DebugKit](https://github.com/cakephp/debug_kit), you can use t
 
 Make sure you include `html` config of the URL endpoint of the `xhprof_html` folder:
 ```php
-Configure::write('XHProf', array(
+Configure::write('XHProf', [
 	'library' => '/usr/local/Cellar/php54-xhprof/270b75d/xhprof_lib',
 	'html' => 'http://path/to/xhprof_html',
-));
+]);
 ```
 
 Then you can add the panel in your DebugKit Configure panels setup:
