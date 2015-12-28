@@ -25,8 +25,14 @@ This would install the latest 0.1 version to `Plugin/XHProf`:
 ```json
 {
 	"require": {
-		"renan/cakephp-xhprof": "0.1.*"
-	}
+		"renan/cakephp-xhprof": "dev-master"
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git@github.com:dereuromark/CakePHP-XHProf.git"
+		}
+	],
 }
 ```
 You might want to use "require-dev" if you only plan to use this for development.
@@ -74,11 +80,12 @@ Configure::write('XHProf', [
 
 ### Dispatcher Filter
 
-Just include the `XHProfDispatcher` in your dispatcher filters list in `config/bootstrap.php`:
+Just include the `XHProfFilter` in your dispatcher filters list in `config/bootstrap.php`:
 
 ```php
-Configure::write('Dispatcher.filters.xhprof', 'XHProf.XHProfDispatcher');
+DispatcherFactory::add('XHProf.XHProf', ['priority' => 1]);
 ```
+The priority of 1 ensures that we run this filter as the very first one. This is optional can also be left out (default to 10).
 
 By default it will try to replace `%XHProfRunId%` with the saved run id from the page's output.
 It allows you to include a link to the XHProf report on the page.
@@ -106,13 +113,9 @@ Configure::write('XHProf', array(
 ));
 ```
 
-Then you can add the panel in your DebugKit components setup:
+Then you can add the panel in your DebugKit Configure panels setup:
 ```php
-public $components = array(
-	'DebugKit.Toolbar' => array(
-		'panels' => array('XHProf.XHProf')
-	),
-);
+Configure::write('DebugKit.panels', ['XHProf.XHProf']);
 ```
 
 Done. It should now display the new panel with the link to the result of this page output.
@@ -126,7 +129,7 @@ Example:
 
 ```php
 // Declare the class location
-App::uses('XHProf', 'XHProf.Lib');
+use XHProf\Lib\XHProf;
 
 // Start the profiler
 XHProf::start();
