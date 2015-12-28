@@ -5,6 +5,7 @@ namespace XHProf\Routing\Filter;
 use Cake\Core\Configure;
 use Cake\Routing\DispatcherFilter;
 use XHProf\Lib\XHProf;
+use Cake\Event\Event;
 
 /**
  * XHProf Dispatcher Filter

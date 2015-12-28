@@ -2,6 +2,7 @@
 /**
  * XHProf Panel
  */
+use Cake\Core\Configure;
 ?>
 <h2>XHProf</h2>
 
