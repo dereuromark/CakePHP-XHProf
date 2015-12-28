@@ -13,12 +13,12 @@ use Cake\Event\Event;
  */
 class XHProfFilter extends DispatcherFilter {
 
-/**
- * Start the profiler
- *
- * @param \Cake\Event\Event $event
- * @return void
- */
+	/**
+	 * Start the profiler
+	 *
+	 * @param \Cake\Event\Event $event
+	 * @return void
+	 */
 	public function beforeDispatch(Event $event) {
 		XHProf::start();
 	}
@@ -27,19 +27,29 @@ class XHProfFilter extends DispatcherFilter {
 	 * Stop the profiler
 	 *
 	 * @param \Cake\Event\Event $event
-	 * @return mixed Void or modified response if replaceRunId is defined
+	 * @return \Cake\Network\Response|null Modified response if replaceRunId is defined
 	 */
 	public function afterDispatch(Event $event) {
 		$runId = XHProf::finish();
 		$replaceRunId = Configure::read('XHProf.replaceRunId');
 
-		if (!empty($replaceRunId)) {
-			$body = $event->data['response']->body();
-			$body = str_replace($replaceRunId, $runId, $event->data['response']);
-
-			$event->data['response']->body($body);
-			return $event->data['response'];
+		if (empty($replaceRunId)) {
+			return null;
 		}
+
+		$body = $this->_getResponse($event)->body();
+		$body = str_replace($replaceRunId, $runId, $event->data['response']);
+
+		$this->_getResponse($event)->body($body);
+		return $event->data['response'];
+	}
+
+	/**
+	 * @param Event $event
+	 * @return \Cake\Network\Response
+	 */
+	protected function _getResponse($event) {
+		return $event->data['response'];
 	}
 
 }
