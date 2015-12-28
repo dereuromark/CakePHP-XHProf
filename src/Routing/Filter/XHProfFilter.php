@@ -11,23 +11,24 @@ use Cake\Event\Event;
  * XHProf Dispatcher Filter
  *
  */
-class XHProfDispatcher extends DispatcherFilter {
+class XHProfFilter extends DispatcherFilter {
 
 /**
  * Start the profiler
  *
- * @param Event $event
+ * @param \Cake\Event\Event $event
  * @return void
  */
 	public function beforeDispatch(Event $event) {
 		XHProf::start();
 	}
 
-/**
- * Stop the profiler
- *
- * @return mixed Void or modified response if replaceRunId is defined
- */
+	/**
+	 * Stop the profiler
+	 *
+	 * @param \Cake\Event\Event $event
+	 * @return mixed Void or modified response if replaceRunId is defined
+	 */
 	public function afterDispatch(Event $event) {
 		$runId = XHProf::finish();
 		$replaceRunId = Configure::read('XHProf.replaceRunId');

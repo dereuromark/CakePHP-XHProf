@@ -3,16 +3,16 @@
 namespace XHProf\TestCase\Routing\Filter;
 
 use Cake\TestSuite\TestCase;
-use XHProf\Routing\Filter\XHProfDispatcher;
+use XHProf\Routing\Filter\XHProfFilter;
 use Cake\Event\Event;
 use Cake\Network\Response;
 use XHProf\Test\Lib\TestXHProf;
 
 /**
- * XHProfDispatcher test case
+ * XHProfFilter test case
  *
  */
-class XHProfDispatcherTest extends TestCase {
+class XHProfFilterTest extends TestCase {
 
 	/**
 	 * tearDown method
@@ -31,7 +31,7 @@ class XHProfDispatcherTest extends TestCase {
 	 * @return void
 	 */
 	public function testReplaceRunId() {
-		$filter = new XHProfDispatcher();
+		$filter = new XHProfFilter();
 		$response = new Response();
 		$response->body('Run id: %XHProfRunId%.');
 
