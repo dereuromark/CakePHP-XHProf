@@ -1,12 +1,12 @@
 <?php
 /**
  * Custom Panel for https://github.com/cakephp/debug_kit
- */namespace XHProf\Lib\Panel;
+ */
+namespace XHProf\Panel;
 
 use Cake\Controller\Controller;
 
-
-use DebugKit\Lib\DebugPanel;
+use DebugKit\DebugPanel;
 
 /**
  * Provides XHProf link and infos.
@@ -20,16 +20,5 @@ class XHProfPanel extends DebugPanel {
 	 * @var string
 	 */
 	public $plugin = 'XHProf';
-
-	/**
-	 * Not used right now
-	 *
-	 * @param \Controller|string $controller
-	 * @return array
-	 */
-	public function beforeRender(Controller $controller) {
-
-		return array();
-	}
 
 }
