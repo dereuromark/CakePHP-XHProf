@@ -3,25 +3,25 @@
 /**
  * XHProf
  *
- */namespace XHProf\Lib;
+ */
+namespace XHProf\Lib;
 
 use Cake\Core\Configure;
 
-
 class XHProf {
 
-/**
- * Whether it initiated or not
- *
- * @var bool
- */
+	/**
+	 * Whether it initiated or not
+	 *
+	 * @var bool
+	 */
 	protected static $_initiated = false;
 
-/**
- * Base configuration
- *
- * @var array
- */
+	/**
+	 * Base configuration
+	 *
+	 * @var array
+	 */
 	protected static $_baseConfig = array(
 		'replaceRunId' => '%XHProfRunId%',
 		'namespace' => APP_DIR,
@@ -33,25 +33,25 @@ class XHProf {
 		),
 	);
 
-/**
- * Whether profiling has started or not
- *
- * @var bool
- */
+	/**
+	 * Whether profiling has started or not
+	 *
+	 * @var bool
+	 */
 	protected static $_started = false;
 
-/**
- * Start xhprof profiler
- *
- * ### Options
- *
- * - `flags`
- * - `ignored_functions`
- *
- * @param array $options List options passed to xhprof_enable, if none default configuration will be used
- * @return void
- */
-	public static function start($options = array()) {
+	/**
+	 * Start XHProf profiler
+	 *
+	 * ### Options
+	 *
+	 * - `flags`
+	 * - `ignored_functions`
+	 *
+	 * @param array $options List options passed to xhprof_enable, if none default configuration will be used
+	 * @return void
+	 */
+	public static function start(array $options = array()) {
 		if (!self::$_initiated) {
 			self::_initialize();
 		}
@@ -68,20 +68,20 @@ class XHProf {
 		self::$_started = true;
 	}
 
-/**
- * Whether profiling has started or not
- *
- * @return bool
- */
+	/**
+	 * Whether profiling has started or not
+	 *
+	 * @return bool
+	 */
 	public static function started() {
 		return self::$_started;
 	}
 
-/**
- * Stop xhprof profiler
- *
- * @return array Profiler data from the run
- */
+	/**
+	 * Stop XHProf profiler
+	 *
+	 * @return array Profiler data from the run
+	 */
 	public static function stop() {
 		// Reset started
 		self::$_started = false;
@@ -89,17 +89,17 @@ class XHProf {
 		return xhprof_disable();
 	}
 
-/**
- * Stop and save the xhprof profiler run
- *
- * @return string Saved run id
- */
+	/**
+	 * Stop and save the XHProf profiler run
+	 *
+	 * @return string Saved run id
+	 */
 	public static function finish() {
 		// Stop profiling
 		$data = self::stop();
 
 		// Save the run
-		$xhprof = new XHProfRuns_Default();
+		$xhprof = new \XHProfRuns_Default();
 		$runId = $xhprof->save_run($data, Configure::read('XHProf.namespace'));
 
 		return $runId;
@@ -113,7 +113,7 @@ class XHProf {
 	protected static function _initialize() {
 		// Can't profile without xhprof
 		if (!extension_loaded('xhprof')) {
-			throw new RuntimeException('XHProf extension is not loaded.');
+			throw new \RuntimeException('XHProf extension is not loaded.');
 		}
 
 		// Merge base configuration
@@ -129,7 +129,7 @@ class XHProf {
 			);
 			foreach ($files as $file) {
 				if (!include $file) {
-					throw new RuntimeException(sprintf(
+					throw new \RuntimeException(sprintf(
 						'Couldn\'t include library file: %s.',
 						$file
 					));
