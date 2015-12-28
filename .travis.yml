@@ -1,49 +1,50 @@
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
 
 env:
-  - CAKE_VERSION=2.3.10
-  - CAKE_VERSION=2.4.10
-  - CAKE_VERSION=master
+  matrix:
+    - DB=mysql db_class='Cake\Database\Driver\Mysql' db_dsn='mysql:host=0.0.0.0;dbname=cakephp_test' db_database='cakephp_test' db_username='travis' db_password=''
+  global:
+    - DEFAULT=1
+
+matrix:
+  allow_failures:
+    - php: 5.4
+      env: PHPCS=1 DEFAULT=0
+
+  fast_finish: true
+
+  include:
+    - php: 5.4
+      env: PHPCS=1 DEFAULT=0
+
+    - php: 5.4
+      env: COVERALLS=1 DEFAULT=0
 
 before_script:
-  - git clone --depth 1 git://github.com/cakephp/cakephp --branch $CAKE_VERSION ../cakephp && cd ../cakephp
-  - git clone --depth 1 git://github.com/facebook/xhprof.git vendors/xhprof
-  - sh -c "cd vendors/xhprof/extension && phpize && ./configure --enable-xhprof && make && sudo make install"
-  - echo -ne "[xdebug]\nextension=xhprof.so\nxhprof.output_dir=/tmp" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
-  - echo 'Configure::write("XHProf.library", dirname(APP) . "/vendors/xhprof/xhprof_lib");' >> app/Config/bootstrap.php
-  - cp -R ../CakePHP-XHProf plugins/XHProf
-  - cp plugins/XHProf/.coveralls.yml .coveralls.yml
-  - mkdir -p build/logs
-  - echo "<phpunit>
-      <filter>
-        <whitelist processUncoveredFilesFromWhitelist=\"true\">
-          <directory suffix=\".php\">$(pwd)/plugins/XHProf</directory>
-          <exclude>
-            <file>$(pwd)/plugins/XHProf/Lib/Panel/XHProfPanel.php</file>
-            <directory suffix=\".php\">$(pwd)/plugins/XHProf/Test</directory>
-          </exclude>
-        </whitelist>
-      </filter>
-      <logging>
-        <log type=\"coverage-clover\" target=\"build/logs/clover.xml\" />
-      </logging>
-    </phpunit>" > phpunit.xml
   - composer self-update
-  - composer init --no-interaction
-  - composer require --dev satooshi/php-coveralls:dev-master
-  - composer global require 'phpunit/phpunit=3.7.33'
-  - ln -s ~/.composer/vendor/phpunit/phpunit/PHPUnit vendors/PHPUnit
+  - composer install --prefer-source --no-interaction --dev
+
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi"
+
+  - sh -c "if [ '$PHPCS' = '1' ]; then pear channel-discover pear.cakephp.org; fi"
+  - sh -c "if [ '$PHPCS' = '1' ]; then pear install --alldeps cakephp/CakePHP_CodeSniffer; fi"
+
+  - sh -c "if [ '$COVERALLS' = '1' ]; then composer require --dev satooshi/php-coveralls:dev-master; fi"
+  - sh -c "if [ '$COVERALLS' = '1' ]; then mkdir -p build/logs; fi"
+
+  - phpenv rehash
+  - set +H
+  - cp phpunit.xml.dist phpunit.xml
 
 script:
-  - ./lib/Cake/Console/cake test XHProf AllXHProf
-
-after_script:
-  - ./vendor/bin/coveralls
+  - sh -c "if [ '$COVERALLS' = '1' ]; then phpunit --coverage-clover build/logs/clover.xml; fi"
+  - sh -c "if [ '$COVERALLS' = '1' ]; then php vendor/bin/coveralls -c .coveralls.yml -v; fi"
+  - sh -c "if [ '$DEFAULT' = '1' ]; then phpunit; fi"
+  - sh -c "if [ '$PHPCS' = '1' ]; then phpcs -p --extensions=php --standard=CakePHP --ignore=vendor --ignore=Test --ignore=docs . ; fi"
 
 notifications:
   email: false
