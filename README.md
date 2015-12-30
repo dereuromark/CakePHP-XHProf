@@ -44,13 +44,20 @@ The basic configuration consists of loading the plugin and pointing where the `x
 In your `config/bootstrap.php` file:
 
 ```php
-// Load XHProf Plugin
-Plugin::load('XHProf');
-
 // XHProf Configuration
 Configure::write('XHProf', [
 	'library' => '/usr/local/Cellar/php54-xhprof/270b75d/xhprof_lib',
 ]);
+
+// Load XHProf Plugin
+Plugin::load('XHProf');
+```
+
+If you only want to load it when the extension is available (e.g. on the testing server), you can wrap it with
+```php
+if (extension_loaded('xhprof')) {
+	// Load plugin (and add dispatching filter)
+}
 ```
 
 Options:
