@@ -80,12 +80,13 @@ Configure::write('XHProf', [
 
 ### Dispatcher Filter
 
-Just include the `XHProfFilter` in your dispatcher filters list in `config/bootstrap.php`:
+Just include the `XHProfFilter` in your dispatcher filters list in `config/bootstrap.php` after the plugin has been loaded:
 
 ```php
-DispatcherFactory::add('XHProf.XHProf', ['priority' => 1]);
+DispatcherFactory::add('XHProf.XHProf');
 ```
-The priority of 1 ensures that we run this filter as the very first one. This is optional can also be left out (default to 10).
+
+Note that using `['priority' => 1]` as options array seems to cause an infinite loop. So it is better left out (default to 10).
 
 By default it will try to replace `%XHProfRunId%` with the saved run id from the page's output.
 It allows you to include a link to the XHProf report on the page.
@@ -115,6 +116,7 @@ Configure::write('XHProf', [
 
 Then you can add the panel in your DebugKit Configure panels setup:
 ```php
+// This must come before the DebugKit is loaded!
 Configure::write('DebugKit.panels', ['XHProf.XHProf']);
 ```
 
